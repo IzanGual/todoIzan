@@ -1,0 +1,515 @@
+:root {
+    --colorFondo: #1c1c1e;          /* Fondo oscuro */
+    --colorPrimario: #2c2c2e;       /* Gris oscuro */
+    --colorSecundario: #8e8e93;     /* Gris medio */
+    --colorLlamativo: #007aff;      /* Azul representativo de Apple */
+    --colorTexto: #f2f2f7;          /* Gris claro para texto */
+    --colorLlamativoDos: #ff3b30;   /* Rojo distintivo */
+}
+*{
+   margin: 10px;
+   box-sizing: border-box;
+   color: var(--colorTexto);
+}
+
+body {
+    font-family: "textoNormal";
+    display: flex;
+    justify-content: center;
+    background-color: var(--colorFondo);
+}
+
+@font-face {
+    font-family: "textoNormal";
+    src: url("tipoGrafias/textoNormal.ttf");
+}
+@font-face {
+    font-family: "titulo";
+    src: url("tipoGrafias/titulo.ttf");
+}
+
+#wrapper {
+    width: 60%;
+}
+
+#header {
+    display: flex;
+    justify-content: center;
+}
+
+#contenedorInputPrincipal {
+    background-color: var(--colorPrimario);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#contenedorInputMasBoton {
+    display: flex;
+}
+
+
+#inputTarea {
+    padding: 12px 20px;
+    width: 90%;
+    background: none;
+    border: 2px solid var(--colorSecundario);
+    border-radius: 1000px;
+    font: inherit;
+    color: var(--colorTexto);
+    caret-color:  var(--colorLlamativo);
+   
+    margin: auto;
+    margin-top: 10px;
+}
+
+#inputUsuario {
+    padding: 10px 10px;
+    width: 80%;
+    background: none;
+    border: 1px solid var(--colorSecundario);
+    border-radius: 1000px;
+    font: inherit;
+    color: var(--colorTexto);
+    caret-color:  var(--colorLlamativo);
+
+}
+
+
+#inputUsuario:focus{
+    outline: none;
+}
+
+#inputTarea:focus{
+    outline: none;
+}
+
+
+#botonAñadirTarea {
+    background: var(--colorLlamativo);
+    padding: 0px 0px;
+    border: none;
+    border-radius: 1000px;
+    
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+}
+
+#botonAñadirTarea:hover {
+    background: #3190f5;
+    transition: 300ms ease-in-out;
+}
+
+
+#contenedorPrioridadUsuario {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+}
+
+
+#contenedorPrioridad {
+
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+
+}
+#contenedorUsuario {
+
+    width: 30%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
+}
+ul {
+    list-style: none; /* Quita el estilo de viñeta del <li> */
+    padding: 0;
+
+}
+
+li {
+    list-style: none; /* Quita el estilo de viñeta del <li> */
+    margin: 0;
+    padding: 0;
+    border: none;
+    margin-bottom: 10px;
+    padding: 0 16px;
+    background-color: var(--colorPrimario);
+    border-radius: 15px;
+
+
+}
+
+
+.contenedorTarea {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.textoTarea {
+    padding: 15px;
+    padding-right: 0;
+    flex-grow: 1;
+    font-size: 1.2rem;
+    word-wrap: break-word;  /* Permite que las palabras largas se dividan */
+    overflow-wrap: break-word;  /* Comportamiento similar al anterior */
+    white-space: normal;  /* Asegura que el texto puede saltar a la siguiente línea */
+    word-break: break-word; /* Si la palabra es demasiado larga, se divide */
+    max-width: 100%; /* Para asegurar que no se desborde del contenedor */
+    cursor: pointer;
+
+}
+
+.borrarTarea {
+    padding: 0px;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.borrarTarea:hover svg{
+    fill: #ff3b30;
+    transition: 400ms ease-in-out;
+}
+
+.checkboxCool  {
+    border: 2px solid var(--colorLlamativo);
+    border-radius: 1000px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+
+
+  
+}
+
+.checkboxCool svg  {
+    margin: 5px;
+
+  
+}
+
+input[type="checkbox"]:checked ~ .checkboxCool {
+    background: var(--colorLlamativo);
+}
+
+input[type="checkbox"]:checked ~ .checkboxCool svg{
+   fill: var(--colorPrimario);
+   transition: 1s ease;
+}
+
+input[type="checkbox"]:checked ~ .textoTarea{
+    text-decoration: line-through;
+    color: var(--colorSecundario);
+    transition: 1s ease;
+ }
+
+ input[type="checkbox"]{
+    display: none;
+ }
+
+
+#selectorPrioridad {
+    color: #ffffff; /* Texto blanco */
+    background-color: var(--colorFondo); /* Fondo oscuro */
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+ 
+}
+
+#selectorPrioridad:focus{
+    outline: none;
+}
+
+#selectorPrioridad option {
+    background-color: #3b3b3b; /* Fondo oscuro para las opciones */
+    color: #ffffff; /* Texto blanco */
+    padding: 8px;
+}
+
+
+h1 {
+    font-family: "titulo";
+    background: var(--colorLlamativo); /* Aplica el gradiente como fondo */
+    -webkit-background-clip: text;    /* Corta el fondo para que siga el contorno del texto */
+    -webkit-text-fill-color: transparent; /* Hace que el texto sea transparente */
+    display: inline;
+    font-size: 5rem
+}
+
+
+
+
+.contenedorAtributosTarea {
+ 
+    
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+}
+
+#filtros {
+    background-color: var(--colorPrimario);
+    border-radius: 10px;
+    display: flex;
+   
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+
+
+.contenedorPrioridad {
+    display: flex;
+}
+
+.barra {
+    margin: 4px;
+    width: 15px;
+    height: 25px;
+    border-radius: 2px;
+    opacity: 20%;
+}
+
+.rojo {
+    background-color: red;
+}
+
+.naranja {
+    background-color: orange;
+}
+
+.amarillo {
+    background-color: yellow;
+}
+
+.verde {
+    background-color: green;
+}
+
+
+#selectorFiltros {
+    color: #ffffff; /* Texto blanco */
+    background-color: var(--colorFondo); /* Fondo oscuro */
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+  
+}
+
+#selectorFiltros:focus{
+    outline: none;
+}
+
+#selectorFiltros option {
+    background-color: #3b3b3b; /* Fondo oscuro para las opciones */
+    color: #ffffff; /* Texto blanco */
+    padding: 8px;
+}
+
+
+#inputnombreUsuarioFiltrar {
+    padding: 10px 10px;
+    min-width: 25%;
+    background: none;
+    border: 1px solid var(--colorSecundario);
+    border-radius: 1000px;
+    font: inherit;
+
+    color: var(--colorTexto);
+    caret-color:  var(--colorLlamativo);
+
+}
+
+.placeholderRojo::placeholder  {
+    color: rgb(228, 68, 68);
+    transition: 300ms ease-in;
+}
+
+#inputnombreUsuarioFiltrar:focus{
+    outline: none;
+}
+
+
+
+#tituloFiltros {
+    font-size: 1.4rem;
+}
+
+#filtraUsuario {
+    background: var(--colorLlamativo);
+    padding: 1px 1px;
+    border: none;
+    border-radius: 1000px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+#filtraUsuario:hover {
+    background: #3190f5;
+    transition: 300ms ease-in-out;
+}
+
+
+/* Media queris */
+
+@media (max-width: 1400px) {
+
+    #wrapper {
+        width: 80%;
+        margin: auto;
+    }
+  }
+
+  @media (max-width: 650px) {
+    *{
+        margin: 0px;
+       
+     }
+     
+    html, body{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+  
+    #wrapper {
+        width: 100%;
+        margin: 20px 20px;
+        padding: 0;
+    }
+
+    .tarea {
+        padding: 0;
+    }
+
+    #botonAñadirTarea{
+    background: var(--colorLlamativo);
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 1000px;
+    
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: auto;
+    margin-top: 10px;
+    width: 90%;
+    height: 50px;
+    }
+    
+    #contenedorInputMasBoton{
+        flex-direction: column;
+    }
+
+    #contenedorPrioridadUsuario{
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    #contenedorPrioridad {
+        width: 100%;
+        
+    }
+
+    #contenedorUsuario {
+        width: 100%;
+        
+    }
+
+    #inputUsuario{
+        
+        width: 50%;
+    }
+
+    #filtros {
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    #tituloPrioridadInput {
+        margin: 10px;
+    }
+
+    #selectorPrioridad {
+        margin: 10px;
+    }
+
+    #tituloUsuarioInput {
+        margin: 10px;
+    }
+
+    #inputUsuario {
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    #selectorFiltros {
+        margin: 10px;
+    }
+
+    #inputnombreUsuarioFiltrar {
+        margin: 10px;
+    }
+
+    #filtraUsuario svg {
+        margin: 5px;
+    }
+
+    #filtraUsuario  {
+        margin: 10px;
+    }
+
+    .contenedorTarea {
+        margin: 10px;
+    }
+
+    .contenedorAtributosTarea {
+        padding: 10px;
+        padding-top: 0px;
+        
+        display: flex;align-items: center; justify-content: space-between;
+    }
+
+   
+
+    
+    
+  
+
+
+}
+
+
+ 
