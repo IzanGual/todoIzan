@@ -1,6 +1,7 @@
 // Inicializo ID que utilizo para poder tachar tareas y identificarlas para poder borrarlas
 let id = 0;
 
+
 //cada vez que se reiniucie la página:
 document.addEventListener("DOMContentLoaded", () => {
     //Inicializo constantes necesarias
@@ -16,14 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // PRUEBAAAA
     let fecha = new Date();
     let tareaPrueba = new Tarea("tareaPrueba", "2", "IZAN", fecha);
+
     miListaTareas.addTarea(tareaPrueba);
     printTareaNueva(tareaPrueba, miListaTareas);
     id++;
      // PRUEBAAAA
 
+
      //Añado listener para el boton de añadir tarea
     botonAñadirTarea.addEventListener("click", () => {
-       
 
         //Si alguno de los inputs esta vacio pongo placeholder rojo
         if (inputTextoTarea.value == "" || inputTextoUsuario.value == "") {
@@ -40,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let tarea = new Tarea(textoTarea, prioridad, usuario, fecha);
             miListaTareas.addTarea(tarea);
+
 
             //Cada vez que creo una nueva tarea uncremento el id
             printTareaNueva(tarea, miListaTareas);
@@ -58,51 +61,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Creo listener para el selector de los filtros
     const selectorFiltros = document.getElementById("selectorFiltros");
+    let filtro = "";
 
     selectorFiltros.addEventListener("change", (event) => {
         const valorSeleccionado = event.target.value;
         
         // Segun el valor seleccionado llamare a una funcion u otra que ordenara de X manera el array.
-        switch (valorSeleccionado) {
-            case "1":
-                imprimirListaOrdenadaFecha(miListaTareas, listaDeTareasHTML);
-                console.log("Filtrando por fecha");
-                break;
-            case "2":
-                imprimirListaOrdenadaPrioridad(miListaTareas,listaDeTareasHTML);
-                console.log("Filtrando por prioridad");
-                break;
-            case "3":
-                    //Si filtra por usuario y no pone nada se filtraran por orden alfabetico
-                    imprimirListaOrdenadaUsuario(miListaTareas,listaDeTareasHTML);
-                    
-                    //Listener para el boton filtrar por nombre de Usuario
-                    botonFiltrar = document.getElementById("filtraUsuario");
-                    botonFiltrar.addEventListener("click", () => {
-                        let inputUsuarioFlitrar = document.getElementById("inputnombreUsuarioFiltrar");
+        let inputUsuarioFlitrar = document.getElementById("inputnombreUsuarioFiltrar");
 
-                        //Si al apretar el boton el imput esta vacio lo vuelve a ordenar por orden alfabetico para evitar errores
-                        if (inputUsuarioFlitrar.value.trim() === "") {
-                            imprimirListaOrdenadaUsuario(miListaTareas,listaDeTareasHTML);
-                        }
-                        //Si ha introducido algo se llama a  la siguiente funcion
-                        else {
-                            imprimirListaOrdenadaUsuarioPorNombre(miListaTareas,listaDeTareasHTML);
-                        }
-                    });
-                    
-                
-                    console.log("Filtrando por usuario");
-                break;
-            default:
-                console.log("Opción no válida");
-        }
+        let botonFiltrar = document.getElementById("filtraUsuario");
+
+        filtra(valorSeleccionado, listaDeTareasHTML, miListaTareas, inputUsuarioFlitrar);
+
+        botonFiltrar.addEventListener("click", function() {
+
+            filtra(valorSeleccionado, listaDeTareasHTML, miListaTareas, inputUsuarioFlitrar);
+  
+        });
+        
+       
     });
 
 });
-
-
-
 
 // Funcion para imprimir tareas.
 function printTareaNueva(tarea, miListaTareas) {
@@ -187,65 +167,59 @@ function printTareaNueva(tarea, miListaTareas) {
         // Y lo borro del dom
         listaDeTareasHTML.removeChild(nuevaTarea); 
     });
+
+    // Agregar listener para el boton eliminarTarea que es unico gracias al ID
+    const chekBox = nuevaTarea.querySelector(`#tarea-${id}`);
+    chekBox.addEventListener("click", () => {
+       
+        tarea.marcado = chekBox.checked
+        //alert(tarea.marcado)
+
+    });
+
+
+    // Si el atributo marcado es true, marcar el checkbox cada vez que se pinte, si no no hacre nada;
+    if(tarea.marcado) {
+        chekBox.checked = true;
+    }
+    else{
+       // alert("La siguiente tarea no esta terminada")
+    }
 }
 
-// En esta funcion borro todas las tareas del dom, ordeno la lista desde la funcion  miListaTareas.listaOrdenadaPorFecha() de mi objeto y por cada uno de sus elementos creo una tarea
-function imprimirListaOrdenadaFecha(miListaTareas,listaDeTareasHTML) {
+function limpiarListaHTML_ImprimirNuevas (listaDeTareasHTML, miListaTareas) {
     while (listaDeTareasHTML.firstChild) {
         listaDeTareasHTML.removeChild(listaDeTareasHTML.firstChild);
     }
 
-    miListaTareas.listaOrdenadaPorFecha().forEach((tarea) => {
+    miListaTareas.forEach((tarea) => {
         printTareaNueva(tarea,miListaTareas);
         id++;
     });
 }
 
-// Borra todas las  tareas del dom y despues de ordenar la lista utilizando miListaTareas.listaOrdenadaPorPrioridad(), por cada uno crea una tarea
-function imprimirListaOrdenadaPrioridad(miListaTareas,listaDeTareasHTML) {
-    while (listaDeTareasHTML.firstChild) {
-        listaDeTareasHTML.removeChild(listaDeTareasHTML.firstChild);
-    }
+function filtra(valorSeleccionado, listaDeTareasHTML, miListaTareas, inputUsuarioFlitrar) {
+    let filtro = "";
+    switch (valorSeleccionado) {
+        case "1":
+            filtro = "fecha";
+            limpiarListaHTML_ImprimirNuevas(listaDeTareasHTML, miListaTareas.ordenarTareas(filtro, inputUsuarioFlitrar.value));
+            console.log("Filtrando por fecha");
+            
+            break;
+        case "2":
+            filtro = "prioridad";
+            limpiarListaHTML_ImprimirNuevas(listaDeTareasHTML, miListaTareas.ordenarTareas(filtro, inputUsuarioFlitrar.value));
 
-    miListaTareas.listaOrdenadaPorPrioridad().forEach((tarea) => {
-        printTareaNueva(tarea,miListaTareas);
-        id++;
-    });
-}
-
-// Borra las tareas del dom y ordenandolas por orden alfavetico por usuario utilizando  miListaTareas.listaOrdenadaPorUsuarioOrdenAlfabetico(); y un for each imprime las tareas ordenadas
-function imprimirListaOrdenadaUsuario(miListaTareas,listaDeTareasHTML) {
-    while (listaDeTareasHTML.firstChild) {
-        listaDeTareasHTML.removeChild(listaDeTareasHTML.firstChild);
+            console.log("Filtrando por prioridad");
+            break;
+        case "3":
+            filtro = "usuario";
+            limpiarListaHTML_ImprimirNuevas(listaDeTareasHTML, miListaTareas.ordenarTareas(filtro, inputUsuarioFlitrar.value));
+                
+            console.log("Filtrando por usuario");
+            break;
+        default:
+            console.log("Opción no válida");
     }
-
-    miListaTareas.listaOrdenadaPorUsuarioOrdenAlfabetico().forEach((tarea) => {
-        printTareaNueva(tarea,miListaTareas);
-        id++;
-    });
-}
-
-// Elimina las tareas del dom y muestra slo las que coincidan con el nombre introducido utilizando iListaTareas.listaOrdenadaPorUsuarioPorNombre(nombreUsuarioAfiltrar).
-function imprimirListaOrdenadaUsuarioPorNombre(miListaTareas,listaDeTareasHTML) {
-    
-    // Inicializo el nombre que se quiere filtrar
-    let nombreUsuarioAfiltrar = document.getElementById("inputnombreUsuarioFiltrar").value;
-    
-    //Si el nombre coincide con algun usuario elimina las tareas del dom, 
-    if ( miListaTareas.listaOrdenadaPorUsuarioPorNombre(nombreUsuarioAfiltrar).length !== 0) {
-        while (listaDeTareasHTML.firstChild) {
-            listaDeTareasHTML.removeChild(listaDeTareasHTML.firstChild);
-        }
-        
-        // Y se llama a esta funcion que devuelve una lista exclusiva con las tareas que coinciudadn ya utilizada arriva
-        miListaTareas.listaOrdenadaPorUsuarioPorNombre(nombreUsuarioAfiltrar).forEach((tarea) => {
-            printTareaNueva(tarea,miListaTareas);
-            id++;
-        });
-    }
-    //Si esta vacio se imprimen por orden alfavetico para evitar errores
-    else {
-        imprimirListaOrdenadaUsuario(miListaTareas,listaDeTareasHTML);
-    }
-    
 }

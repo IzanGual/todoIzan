@@ -5,16 +5,33 @@ class Tarea {
     #prioridad;
     #nombreUsuario;
     #fecha;
+    #marcado;
 
     //Constructor 
-    constructor(textoTarea, prioridad, nombreUsuario, fecha) {
+    constructor(textoTarea, prioridad, nombreUsuario, fecha, marcado) {
         this.#textoTarea = textoTarea;
         this.#prioridad = prioridad;
         this.#nombreUsuario = nombreUsuario;
         this.#fecha = fecha;
+        this.#marcado = marcado;
         // Esto no permite que se agregen mas atributos no queridos fuera del constructor
         Object.seal(this);
     }
+
+    //marcado
+    get marcado() {
+        return this.#marcado;
+    }
+   
+    set marcado(marcado) {
+        if (typeof marcado === "boolean") {
+            this.#marcado = marcado;
+        } else {
+            console.error("El valor de 'marcado' debe ser un booleano.");
+            this.#marcado = false; 
+        }
+    }
+
 
     //textoTarea
     get textoTarea() {
@@ -25,7 +42,7 @@ class Tarea {
         if (textoTarea.length >= 1) {
             this.#textoTarea = textoTarea;
         } else {
-            console.error("El texto de la tarea debe tener al menos 1 caracter.");
+            console.error("El texto de la tarea debe tener al menos 1 carácter.");
         }
     }
 
@@ -51,7 +68,7 @@ class Tarea {
         if (nombreUsuario.length >= 1) {
             this.#nombreUsuario = nombreUsuario;
         } else {
-            console.error("El nombre de usuario debe tener como minimo 1 caracter.");
+            console.error("El nombre de usuario debe tener al menos 1 carácter.");
         }
     }
 
@@ -64,11 +81,12 @@ class Tarea {
         if (fecha instanceof Date && !isNaN(fecha.getTime())) {
             this.#fecha = fecha;
         } else {
-            console.error("La fecha debe ser un objeto de tipo Date .");
+            console.error("La fecha debe ser un objeto de tipo Date válido.");
         }
     }
 
 }
+
 
 class ListaTareas {
     #listaTareas;
@@ -79,69 +97,99 @@ class ListaTareas {
         Object.seal(this);
     }
 
-    // getter y setter listaTareas
+    //ListaTareas
     get listaTareas() {
         return this.#listaTareas;
     }
     set listaTareas(listaTareas) {
         this.#listaTareas = listaTareas;
+
     }
 
-    // Metodos de ListaTareas
-
-    // Añade la tarea a la lista
+    //Añadir la tarea
     addTarea(tarea) {
         this.#listaTareas.push(tarea);
     }
 
-    // Borra la tarea de la lista
+    //Borrar la tarea
     removeTarea(tarea) {
         let indiceTarea = this.#listaTareas.indexOf(tarea);
         this.#listaTareas.splice(indiceTarea, 1);
     }
 
-    // devuelve la lista de tareas
-    getListaTareas(){
-        return this.#listaTareas;
-    }
 
-    // devuelve la lista de tareas ordenada por fecha, la mas vieja primero
-    listaOrdenadaPorFecha() {
-        this.#listaTareas.sort((a, b) => a.fecha - b.fecha);
-        return this.#listaTareas;
-    }
+    // METODO PARA ORDENAR LAS TAREAS 
 
-    // devielve la lista por orden de prioridad, la que tiene prioridad 1 primero etc
-    listaOrdenadaPorPrioridad() {
-        this.#listaTareas.sort((a, b) => a.prioridad - b.prioridad);
-        return this.#listaTareas;
-    }
+    
 
-    // devuelve la lista ordenada por orden alfabetico por nombreUsuario
-    listaOrdenadaPorUsuarioOrdenAlfabetico() {
-        this.#listaTareas.sort((a, b) => {
-            // Lo hacemos de esta forma para  que aunque esten en mayusculas se copare de forma correcta
-            if (a.nombreUsuario.toLowerCase() < b.nombreUsuario.toLowerCase() ) {
-                return -1;
+    ordenarTareas(tipoFiltro, nombreAfiltrar) {
+        if (nombreAfiltrar == "") {
+            switch (tipoFiltro) {
+                case "fecha":
+                    return listaOrdenadaPorFecha(this.#listaTareas);
+
+                case "prioridad":
+                    return listaOrdenadaPorPrioridad(this.#listaTareas);
+
+                case "usuario":
+                    return listaOrdenadaPorUsuarioOrdenAlfabetico(this.#listaTareas);
+
+                default:
+                    console.log("Opción no válida");
             }
-            if (a.nombreUsuario.toLowerCase()  > b.nombreUsuario.toLowerCase() ) {
-                return 1; 
+        }
+        else {
+            let listaOrdenadaUser = listaOrdenadaPorUsuarioPorNombre(nombreAfiltrar, this.listaTareas)
+            switch (tipoFiltro) {
+                case "fecha":
+                    return listaOrdenadaPorFecha(listaOrdenadaUser);
+
+                case "prioridad":
+                    return listaOrdenadaPorPrioridad(listaOrdenadaUser);
+
+                case "usuario":
+                    return listaOrdenadaPorUsuarioOrdenAlfabetico(listaOrdenadaUser);
+
+                default:
+                    console.log("Opción no válida");
             }
-            return 0; 
-        });
+
+        }
+    }
+}
+
+
+function listaOrdenadaPorFecha(lista) {
+    lista.sort((a, b) => a.fecha - b.fecha);
+    return lista;
+}
+
+function listaOrdenadaPorPrioridad(lista) {
+    lista.sort((a, b) => a.prioridad - b.prioridad);
+    return lista;
+}
+
+function listaOrdenadaPorUsuarioOrdenAlfabetico(lista) {
+    lista.sort((a, b) => {
         
-        return this.#listaTareas;
-    }
+        if (a.nombreUsuario.toLowerCase() < b.nombreUsuario.toLowerCase() ) {
+            return -1;
+        }
+        if (a.nombreUsuario.toLowerCase()  > b.nombreUsuario.toLowerCase() ) {
+            return 1; 
+        }
+        return 0; 
+    });
+    
+    return lista;
+}
 
-    // devuelve un array distinto con solo las coincidencias que haya tenido con el nombre, tambien es indiferente las mayusculas
-    listaOrdenadaPorUsuarioPorNombre(nombreUsuario) {
-        let listaTareasFiltradaPorUsuario = [];
-        this.#listaTareas.forEach(tarea => {
-            if (tarea.nombreUsuario.toLowerCase() == nombreUsuario.toLowerCase()) {
-                listaTareasFiltradaPorUsuario.push(tarea);
-            }
-         });
-        return listaTareasFiltradaPorUsuario;
-    }
-
+function listaOrdenadaPorUsuarioPorNombre(nombreUsuario, lista) {
+    let listaTareasFiltradaPorUsuario = [];
+    lista.forEach(tarea => {
+        if (tarea.nombreUsuario.toLowerCase() == nombreUsuario.toLowerCase()) {
+            listaTareasFiltradaPorUsuario.push(tarea);
+        }
+     });
+    return listaTareasFiltradaPorUsuario;
 }

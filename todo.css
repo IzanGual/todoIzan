@@ -248,9 +248,7 @@ input[type="checkbox"]:checked ~ .textoTarea{
 
 h1 {
     font-family: "titulo";
-    background: var(--colorLlamativo); /* Aplica el gradiente como fondo */
-    -webkit-background-clip: text;    /* Corta el fondo para que siga el contorno del texto */
-    -webkit-text-fill-color: transparent; /* Hace que el texto sea transparente */
+    color: var(--colorLlamativo); /* Aplica el gradiente como fondo */
     display: inline;
     font-size: 5rem
 }
