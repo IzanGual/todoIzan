@@ -1,7 +1,7 @@
 // Inicializo ID que utilizo para poder tachar tareas y identificarlas para poder borrarlas
 let id = 0;
 
-
+const miListaTareas = new ListaTareas();
 //cada vez que se reiniucie la página:
 document.addEventListener("DOMContentLoaded", () => {
     //Inicializo constantes necesarias
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectorPrioridad = document.getElementById("selectorPrioridad");
     const inputTextoUsuario = document.getElementById("inputUsuario");
     const listaDeTareasHTML = document.getElementById("listaTareas");
-    const miListaTareas = new ListaTareas();
+    
 
 
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Funcion para imprimir tareas.
-function printTareaNueva(tarea, miListaTareas) {
+function printTareaNueva(tarea) {
     //Inicializo la const, que es el elemento que será padre de todas las tareas
     const listaDeTareasHTML = document.getElementById("listaTareas");
 
@@ -162,7 +162,7 @@ function printTareaNueva(tarea, miListaTareas) {
     botonBorrar.addEventListener("click", () => {
 
         // LLamo a la funcion removeTarea(tarea); para eliminar la tarea de la lista
-        miListaTareas.removeTarea(nuevaTarea);
+        miListaTareas.removeTarea(tarea);
 
         // Y lo borro del dom
         listaDeTareasHTML.removeChild(nuevaTarea); 
@@ -187,12 +187,13 @@ function printTareaNueva(tarea, miListaTareas) {
     }
 }
 
-function limpiarListaHTML_ImprimirNuevas (listaDeTareasHTML, miListaTareas) {
+function limpiarListaHTML_ImprimirNuevas (listaDeTareasHTML, miiListaTareas) {
     while (listaDeTareasHTML.firstChild) {
         listaDeTareasHTML.removeChild(listaDeTareasHTML.firstChild);
     }
 
-    miListaTareas.forEach((tarea) => {
+    miiListaTareas.forEach((tarea) => {
+        
         printTareaNueva(tarea,miListaTareas);
         id++;
     });
